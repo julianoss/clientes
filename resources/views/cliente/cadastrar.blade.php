@@ -9,25 +9,27 @@
                     Voltar
                 </a>
                 <hr>
-                <form class="form-horizontal" role="form" method="POST" action="{{ url('/cliente/cadastrar') }}">
+                <div id="errorText" class="text-center text-info hidden">
+                    <h6>Por favor, preencha todos os campos.</h6>
+                </div>
+                <form id="formCadastro" class="form-horizontal" role="form" method="POST" action="{{ url('/cliente/cadastrar') }}">
                     {{ csrf_field() }}
-
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Nome</label>
+                        <label class="col-md-3 control-label">* Nome</label>
                         <div class="col-md-6">
                             <input type="text" class="form-control" name="nome" value="{{ old('nome') }}">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Telefone</label>
+                        <label class="col-md-3 control-label">* Telefone</label>
                         <div class="col-md-6">
                             <input type="tel" class="form-control" name="telefone">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Email</label>
+                        <label class="col-md-3 control-label">* Email</label>
                         <div class="col-md-6">
                             <input type="email" class="form-control" name="email">
                         </div>
@@ -44,4 +46,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="/js/clienteCadastro.js"></script>
 @endsection

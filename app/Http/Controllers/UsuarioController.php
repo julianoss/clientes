@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Usuario;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,11 +15,14 @@ class UsuarioController extends Controller
      * UsuarioController constructor.
      * @param $usuario
      */
-    public function __construct(User $usuario)
+    public function __construct(Usuario $usuario)
     {
         $this->usuario = $usuario;
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function login()
     {
         return view('auth.login');
