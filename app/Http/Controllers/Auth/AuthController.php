@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -28,7 +30,9 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/cliente';
+
+    protected $username = 'login';
 
     /**
      * Create a new authentication controller instance.
@@ -40,6 +44,34 @@ class AuthController extends Controller
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
 
+    // Override
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, [
+            'login' => 'required', 'password' => 'required',
+        ]);
+
+        $credentials = $request->only('login', 'password');
+
+        if (Auth::attempt($credentials))
+        {
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return redirect('/login')
+            ->withInput($request->only('login'))
+            ->withErrors([
+                'login' => $this->getFailedLoginMessage(),
+            ]);
+    }
+
+    public function logout()
+    {
+        Auth::guard($this->getGuard())->logout();
+
+        return redirect('/login');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -49,9 +81,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'login' => 'required',
+            'password' => 'required',
         ]);
     }
 
@@ -64,9 +95,8 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'login' => $data['login'],
+            'password' => bcrypt($data['senha']),
         ]);
     }
 }
